@@ -1,0 +1,44 @@
+name: PopAds Adsterra Optimizer
+
+on:
+  schedule:
+    # يشغل السكربت كل ساعة
+    - cron: "0 * * * *"
+  workflow_dispatch:  # يسمح لك تشغله يدويًا من GitHub
+
+jobs:
+  run-optimizer:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests pandas
+
+    - name: Run optimizer script
+      env:
+        POPADS_API_KEY: ${{ secrets.47eaebcf72bf47f685045240905ec3ffa55f5f5d }}
+        POPADS_API_SECRET: ${{ secrets.47eaebcf72bf47f685045240905ec3ffa55f5f5d }}
+        ADSTERRA_API_KEY: ${{ secrets.a9d7a612e59eef2ceea02b1ef45e2599 }}
+        DATE_RANGE: "today"
+        MIN_IMPRESSIONS: "100"
+        MIN_COST_USD: "0.05"
+        ROI_CUTOFF: "-10"
+        DRY_RUN: "true"          # غيّرها لـ false لما تتأكد أن كل شيء تمام
+        AUTO_EXCLUDE: "false"    # غيّرها لـ true لو حابب الاستبعاد الأوتوماتيك
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        GMAIL_USER: ${{ secrets.GMAIL_USER }}
+        GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        EMAIL_TO: ${{ secrets.youcefbapup@gmail.com }}
+      run: |
+        python popads_adsterra_optimizer.py
