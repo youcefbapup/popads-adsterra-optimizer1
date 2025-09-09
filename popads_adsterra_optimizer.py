@@ -1,0 +1,1 @@
+print("Optimizer script placeholder - replace with your popads_adsterra_optimizer.py")
